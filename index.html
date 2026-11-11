@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory Encoding Experiment</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="site-header">
+      <p class="eyebrow">COGNITIVE EXPERIMENT</p>
+      <h1>Memory &amp; Encoding Study</h1>
+      <p class="subtitle">A short study of how different encoding strategies affect free recall.</p>
+    </header>
+
+    <section id="welcome-screen" class="panel">
+      <h2>Welcome</h2>
+      <p>You will complete the study in a fixed sequence of steps. Read the instructions on each screen before selecting its button; the page will tell you exactly what happens next.</p>
+      <ol class="step-list">
+        <li><strong>Study 18 words</strong> across three six-word blocks. Each block uses one encoding strategy.</li>
+        <li><strong>Count backward</strong> by threes for 30 seconds.</li>
+        <li><strong>Recall</strong> as many studied words as you can, in any order.</li>
+      </ol>
+      <p>The three strategies used during the study are:</p>
+      <ul>
+        <li>Maintenance rehearsal</li>
+        <li>Self-reference</li>
+        <li>Mental imagery</li>
+      </ul>
+      <p>The order of strategies and the assignment of word lists are randomized for each session. Each word appears individually for a few seconds. After the study blocks, you will complete a 30-second counting task and then recall as many words as you can.</p>
+      <div class="notice">
+        <strong>Important:</strong> Complete the task without looking back at earlier screens or using notes. Your responses are not sent to a server; they remain in this browser session unless you download the CSV files.
+      </div>
+      <div class="settings">
+        <label for="display-duration">Word display duration</label>
+        <div class="setting-control">
+          <input id="display-duration" type="number" min="1" max="10" value="3">
+          <span>seconds per word</span>
+        </div>
+        <p class="small muted">Default: 3 seconds. The distractor task is fixed at 30 seconds.</p>
+      </div>
+      <button id="begin-button" class="primary">Begin experiment</button>
+    </section>
+
+    <section id="instruction-screen" class="panel hidden" aria-live="polite">
+      <p class="eyebrow" id="block-count">BLOCK 1 OF 3</p>
+      <h2 id="strategy-title">Encoding strategy</h2>
+      <p id="strategy-instructions" class="instruction-copy"></p>
+      <div class="instruction-guide">
+        <h3>What to do during this block</h3>
+        <ol>
+          <li>Read the strategy instructions above.</li>
+          <li>Select <strong>Begin this block</strong> when you are ready.</li>
+          <li>For each of the six words, use this strategy while the word is on screen.</li>
+          <li>When all six words have appeared, a transition screen will explain the next step.</li>
+        </ol>
+      </div>
+      <p class="muted small">Each word appears for the same amount of time. You cannot pause or return to an earlier word.</p>
+      <button id="start-block-button" class="primary">Begin this block</button>
+    </section>
+
+    <section id="study-screen" class="panel hidden" aria-live="polite">
+      <div class="progress-row">
+        <span id="study-progress-label">Block 1 · Word 1 of 6</span>
+        <span id="study-countdown">3.0 s</span>
+      </div>
+      <div class="progress-track"><div id="study-progress" class="progress-fill"></div></div>
+      <div class="stimulus-area">
+        <p class="muted small">STUDY THIS WORD</p>
+        <div id="stimulus-word" class="stimulus-word">apple</div>
+      </div>
+      <p class="muted small centered">Please keep your attention on the word until it disappears.</p>
+    </section>
+
+    <section id="between-screen" class="panel hidden" aria-live="polite">
+      <p class="eyebrow" id="between-step-label">STUDY PROGRESS</p>
+      <h2 id="between-title">Block complete</h2>
+      <p id="between-message">You have completed this block.</p>
+      <div class="next-step-box">
+        <strong>What happens next?</strong>
+        <p id="next-step-instruction">Select Continue to proceed.</p>
+      </div>
+      <button id="continue-button" class="primary">Continue to next step</button>
+    </section>
+
+    <section id="distractor-screen" class="panel hidden">
+      <p class="eyebrow">DISTRACTOR TASK</p>
+      <h2>Count backward by threes</h2>
+      <div class="task-directions">
+        <p><strong>Your task:</strong> Start with the number shown. Subtract 3, enter the result, and press <strong>Enter</strong> (or select Submit). Then subtract 3 from your previous answer and enter the next result.</p>
+        <p>Continue as quickly and accurately as you can until the 30-second timer reaches zero. If you make a mistake, continue subtracting 3 from the number you just entered.</p>
+      </div>
+      <div class="starting-number" id="starting-number">684</div>
+      <div class="timer" id="distractor-timer">30</div>
+      <label for="distractor-input">Your next number</label>
+      <div class="inline-entry">
+        <input id="distractor-input" type="number" inputmode="numeric" autocomplete="off" placeholder="Type a number">
+        <button id="submit-distractor" class="primary">Submit</button>
+      </div>
+      <p id="distractor-feedback" class="small muted" aria-live="polite">Press Start when you are ready.</p>
+      <button id="start-distractor" class="primary">Start 30-second task</button>
+      <p class="small muted">The timer starts only when you select the start button. You will automatically move to a short instruction screen when time is up.</p>
+    </section>
+
+    <section id="recall-transition-screen" class="panel hidden" aria-live="polite">
+      <p class="eyebrow">FINAL TASK</p>
+      <h2>Counting task complete</h2>
+      <p>The 30-second counting period has ended. The final part of the experiment is a free-recall task.</p>
+      <div class="next-step-box">
+        <strong>What to do next</strong>
+        <p>You will have a text box in which to enter as many of the 18 words from the study as you remember. You may enter them in any order. Do not use notes or return to previous screens.</p>
+      </div>
+      <button id="proceed-recall" class="primary">Continue to word recall</button>
+    </section>
+
+    <section id="recall-screen" class="panel hidden">
+      <p class="eyebrow">FREE RECALL</p>
+      <h2>Recall the studied words</h2>
+      <div class="task-directions">
+        <p><strong>Your task:</strong> Type as many of the 18 words from the study as you can remember. You may recall them in any order.</p>
+        <p>Separate each word with a comma, a space, or a new line. Enter each word only once. Do not guess, use notes, or go back to earlier screens.</p>
+        <p>When you have entered all the words you can remember, select <strong>Submit recall</strong>. You will then see your results.</p>
+      </div>
+      <label for="recall-response">Your recalled words</label>
+      <textarea id="recall-response" rows="7" placeholder="Enter the words you remember..."></textarea>
+      <p class="small muted">Spelling variations are accepted when the intended word is unambiguous. Each studied word can receive credit only once.</p>
+      <button id="submit-recall" class="primary">Submit recall</button>
+    </section>
+
+    <section id="results-screen" class="panel hidden">
+      <p class="eyebrow">SESSION COMPLETE</p>
+      <h2>Your results</h2>
+      <p id="session-meta" class="small muted"></p>
+      <div id="score-cards" class="score-grid"></div>
+      <h3>Recall details</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>Words recalled</th><th>Score</th><th>Studied words</th></tr></thead>
+          <tbody id="results-table"></tbody>
+        </table>
+      </div>
+      <div class="notice">
+        <strong>Scoring note:</strong> Responses are matched case-insensitively after punctuation is removed. A conservative spelling-tolerance rule accepts close, unambiguous one- or two-character typos. Review the trial-level CSV if a response may have been interpreted incorrectly.
+      </div>
+      <div class="download-row">
+        <button id="download-summary" class="primary">Download summary CSV</button>
+        <button id="download-trials" class="secondary">Download trial-level CSV</button>
+      </div>
+      <button id="new-session" class="text-button">Start a new randomized session</button>
+    </section>
+
+    <footer><span>Memory &amp; Encoding Study</span><span>Local browser experiment</span></footer>
+  </main>
+</body>
+</html>
